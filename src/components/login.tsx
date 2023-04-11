@@ -2,8 +2,8 @@ import { signIn } from "next-auth/react";
 
 export default function Login() {
     return (
-        <>
-            <button onClick={() => void signIn()}>Sign in</button>
-        </>
+        <div>
+            <button onClick={() => void signIn("google")}>Sign in</button>
+        </div>
     )
 }

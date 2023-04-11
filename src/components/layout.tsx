@@ -13,7 +13,7 @@ export default function Layout({ children }: LayoutProps) {
   return (
     status === 'authenticated' ?
     <>
-      <Navbar />
+      <Navbar session={data} />
       <main className="px-2 mx-auto sm:px-6 lg:px-8">{children}</main>
     </>: <Login />
   )

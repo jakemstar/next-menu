@@ -1,5 +1,6 @@
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import { type Session } from 'next-auth';
 import Image from "next/image";
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -16,8 +17,11 @@ const navigation = [
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
+type NavProps = {
+  session: Session
+}
 
-export default function NavBar() {
+export default function NavBar(props: NavProps) {
   const router = useRouter();
   const currentRoute = router.pathname;
 
@@ -98,7 +102,7 @@ export default function NavBar() {
                         className="w-10 h-10 rounded-full"
                         height={40}
                         width={40}
-                        src={"/logoDark.svg"}
+                        src={`${props.session.user.image||"/defaultProfile.jpg"}`}
                         alt=""
                       />
                     </Menu.Button>
