@@ -25,6 +25,12 @@ model Recipe {
   updatedAt   DateTime            @db.Date
 }
 
+model Event {
+  id          String              @id @default(auto()) @map("_id") @db.ObjectId
+  recipeId    String              @db.ObjectId
+  date        DateTime
+}
+
 // Necessary for Next auth
 model Account {
     id                String              @id @default(auto()) @map("_id") @db.ObjectId

@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Fragment } from 'react';
 import ThemeSwitch from './themeswitch';
+import { signOut } from 'next-auth/react';
 
 const navigation = [
   { name: 'Dashboard', href: '/', current: false },
@@ -140,6 +141,7 @@ export default function NavBar(props: NavProps) {
                         <Menu.Item>
                           {({ active }) => (
                               <button
+                                onClick={() => void signOut()}
                                 className={classNames(active ? 'bg-slate-100' : '', 'transition-colors block px-4 py-2 text-sm text-slate-700 w-full text-left')}
                               >
                                 Sign out
