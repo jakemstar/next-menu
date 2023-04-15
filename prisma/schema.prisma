@@ -12,6 +12,11 @@ type RecipeIngredients {
   Name   String
 }
 
+type UserEvents {
+  date     String
+  recipeId String   @db.ObjectId
+}
+
 model Recipe {
   id          String              @id @default(auto()) @map("_id") @db.ObjectId
   authorId    String
@@ -23,12 +28,6 @@ model Recipe {
   steps       String[]
   title       String
   updatedAt   DateTime            @db.Date
-}
-
-model Event {
-  id          String              @id @default(auto()) @map("_id") @db.ObjectId
-  recipeId    String              @db.ObjectId
-  date        DateTime
 }
 
 // Necessary for Next auth
@@ -67,6 +66,7 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]
+    events        UserEvents[]
 }
 
 model VerificationToken {
