@@ -23,6 +23,9 @@ export default function Week() {
         return {name: day, slashDate: mmYYSlateDate}
     })
 
+    if (userLoading) return <>USER LOADING</>
+    if (recipesLoading) return <>RECIPE LOADING</>
+
     return (
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4 pt-6">
             {contentDaysOfTheWeek.map((day, idx) =>
