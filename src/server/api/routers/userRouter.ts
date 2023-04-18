@@ -7,12 +7,13 @@ export const usersRouter = createTRPCRouter({
       userId: z.string(),
     })
   ).query(({ ctx, input }) => {
-    return ctx.prisma.user.findMany({
+    return ctx.prisma.user.findFirst({
         where: {
           id: input.userId
         }
     });
   }),
+
   createEvent: publicProcedure.input(
     z.object({
       recipeId: z.string(),
@@ -26,9 +27,23 @@ export const usersRouter = createTRPCRouter({
       },
       data: {
         events: {
+          deleteMany: {
+            where: {
+              date: input.date
+            }
+          }
+        }
+      },
+    })
+    await ctx.prisma.user.update({
+      where: {
+        id: input.userId
+      },
+      data: {
+        events: {
           push: {recipeId: input.recipeId, date: input.date}
         }
-      }
+      },
     })
   })
 });

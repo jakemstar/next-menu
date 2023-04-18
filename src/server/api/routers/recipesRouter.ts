@@ -7,7 +7,7 @@ export const recipesRouter = createTRPCRouter({
       recipeId: z.string(),
     })
   ).query(({ ctx, input }) => {
-    return ctx.prisma.recipe.findMany({
+    return ctx.prisma.recipe.findFirst({
         where: {
             id: input.recipeId
         }
