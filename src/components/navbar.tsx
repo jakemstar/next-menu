@@ -11,6 +11,7 @@ import { signOut } from 'next-auth/react';
 const navigation = [
   { name: 'Dashboard', href: '/', current: false },
   { name: 'Catalog', href: '/catalog', current: false },
+  { name: 'Create', href: '/create', current: false },
 ]
 
 function classNames(...classes: string[]) {
@@ -32,7 +33,7 @@ export default function NavBar(props: NavProps) {
             <div className="relative flex items-center justify-between h-16">
               <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                 {/* Mobile menu button*/}
-                <Disclosure.Button className="inline-flex items-center justify-center p-2 transition-colors rounded-md text-slate-400 hover:bg-slate-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                <Disclosure.Button className="active:translate-y-0.5 inline-flex items-center justify-center p-2 transition-colors rounded-md text-slate-400 hover:bg-slate-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
                   <span className="sr-only">Open main menu</span>
                   {open ? (
                     <XMarkIcon className="block w-6 h-6" aria-hidden="true" />
@@ -80,7 +81,7 @@ export default function NavBar(props: NavProps) {
                         href={item.href}
                         className={classNames(
                           item.href === currentRoute ? 'bg-slate-900 text-slate-50 dark:bg-slate-50 dark:text-slate-900' : 'text-slate-900 dark:text-slate-50 hover:bg-slate-900 hover:text-slate-50 dark:hover:bg-slate-50 dark:hover:text-slate-900',
-                          'transition-colors rounded-md px-3 py-2 font-medium'
+                          'transition-colors rounded-md px-3 py-2 font-medium active:translate-y-0.5'
                         )}
                         aria-current={item.href === currentRoute ? 'page' : undefined}
                       >
@@ -95,7 +96,7 @@ export default function NavBar(props: NavProps) {
                 {/* Profile dropdown */}
                 <Menu as="div" className="relative ml-3">
                   <div>
-                    <Menu.Button className="flex text-sm transition-colors rounded-full bg-slate-800 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-slate-800">
+                    <Menu.Button className="active:translate-y-0.5 flex text-sm transition-colors rounded-full bg-slate-800 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-slate-800">
                       <span className="sr-only">Open user menu</span>
                       <Image
                         className="w-10 h-10 rounded-full"
@@ -120,7 +121,7 @@ export default function NavBar(props: NavProps) {
                         {({ active }) => (
                           <Link
                             href="/profile"
-                            className={classNames(active ? 'bg-slate-100' : '', 'transition-colors block px-4 py-2 text-sm text-slate-700')}
+                            className={classNames(active ? 'bg-slate-100' : '', 'transition-colors block px-4 py-2 text-sm text-slate-700 active:translate-y-0.5')}
                           >
                             Your Profile
                           </Link>
@@ -130,7 +131,7 @@ export default function NavBar(props: NavProps) {
                         {({ active }) => (
                           <Link
                             href="#"
-                            className={classNames(active ? 'bg-slate-100' : '', 'transition-colors block px-4 py-2 text-sm text-slate-700')}
+                            className={classNames(active ? 'bg-slate-100' : '', 'transition-colors block px-4 py-2 text-sm text-slate-700 active:translate-y-0.5')}
                           >
                             Settings
                           </Link>
@@ -140,7 +141,7 @@ export default function NavBar(props: NavProps) {
                           {({ active }) => (
                               <button
                                 onClick={() => void signOut()}
-                                className={classNames(active ? 'bg-slate-100' : '', 'transition-colors block px-4 py-2 text-sm text-slate-700 w-full text-left')}
+                                className={classNames(active ? 'bg-slate-100' : '', 'transition-colors block px-4 py-2 text-sm text-slate-700 w-full text-left active:translate-y-0.5')}
                               >
                                 Sign out
                               </button>
@@ -159,7 +160,7 @@ export default function NavBar(props: NavProps) {
                   <Link key={item.name} href={item.href}
                   className={classNames(
                     item.href === currentRoute ? 'bg-slate-900 text-slate-50 dark:bg-slate-50 dark:text-slate-900' : 'text-slate-900 bg-violet-50 hover:bg-slate-900 hover:text-slate-50 dark:text-slate-50 dark:bg-slate-700 dark:hover:text-slate-900 dark:hover:bg-slate-50',
-                    'transition-colors block rounded-md px-3 py-2 text-base font-medium'
+                    'transition-colors block rounded-md px-3 py-2 text-base font-medium active:translate-y-0.5'
                     )}
                     aria-current={item.href === currentRoute ? 'page' : undefined}>
                     {item.name}

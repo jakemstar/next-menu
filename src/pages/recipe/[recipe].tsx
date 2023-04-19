@@ -1,5 +1,6 @@
-import { GetStaticProps } from "next";
 import { useRouter } from "next/router";
+import Image  from "next/image";
+import Loading from "~/components/loading";
 import { api } from "~/utils/api";
 
 export default function Recipe() {
@@ -8,9 +9,14 @@ export default function Recipe() {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const { data: recipe, isLoading: recipesLoading } = api.recipes.getById.useQuery({recipeId: recipeId!});
 
+    if (recipesLoading)
+    return <Loading />
+
     return (
         <>
-            <div>
+            <div className="flex flex-col items-center justify-center w-full mx-auto mt-3 rounded md:w-9/12 bg-slate-500">
+                <h1 className="mb-1 text-4xl">{recipe?.title}</h1>
+                <Image className="object-fill w-full h-48 border-4 rounded-lg border-3 border-slate-500" src={recipe?.imageUrl || ""} alt={""} height={50} width={300}></Image>
                 <p>{recipe?.desc}</p>
             </div>
         </>

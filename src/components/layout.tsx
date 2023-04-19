@@ -10,7 +10,7 @@ type LayoutProps = {
 export default function Layout({ children }: LayoutProps) {
   const { data, status } = useSession();
   
-  if (status === 'loading') return <>Session loading</>
+  if (status === 'loading') return <></>
 
   return (
     status === 'authenticated' ?
