@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { recipeInputSchema } from "~/pages/create";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 export const recipesRouter = createTRPCRouter({
@@ -17,17 +18,7 @@ export const recipesRouter = createTRPCRouter({
     return ctx.prisma.recipe.findMany({take: 30});
   }),
   create: publicProcedure.input(
-    z.object({
-      authorId: z.string(),
-      createdAt: z.date(),
-      desc: z.string(),
-      imageUrl: z.string(),
-      ingredients: z.object({}),
-      published: z.boolean(),
-      steps: z.array(z.string()),
-      title: z.string(),
-      updatedAt: z.date()
-    })
+    recipeInputSchema
   ).mutation(({ctx, input}) => {
     return ctx.prisma.recipe.create({
       data: {

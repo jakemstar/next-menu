@@ -4,7 +4,7 @@ import { type Session } from "next-auth";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import { type NextRouter, useRouter } from 'next/router';
+import { useRouter, type NextRouter } from 'next/router';
 import { api } from "~/utils/api";
 import { classNames, daysOfTheWeek } from "~/utils/utility";
 
