@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import { Fragment } from 'react';
 import ThemeSwitch from './themeswitch';
 import { signOut } from 'next-auth/react';
+import { classNames } from '~/utils/utility';
 
 const navigation = [
   { name: 'Dashboard', href: '/', current: false },
@@ -14,9 +15,6 @@ const navigation = [
   { name: 'Create', href: '/create', current: false },
 ]
 
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ')
-}
 type NavProps = {
   session: Session
 }

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { recipeInputSchema } from "~/pages/create";
+import { recipeSchema } from "~/pages/create";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 export const recipesRouter = createTRPCRouter({
@@ -18,7 +18,7 @@ export const recipesRouter = createTRPCRouter({
     return ctx.prisma.recipe.findMany({take: 30});
   }),
   create: publicProcedure.input(
-    recipeInputSchema
+    recipeSchema
   ).mutation(({ctx, input}) => {
     return ctx.prisma.recipe.create({
       data: {

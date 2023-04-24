@@ -3,6 +3,7 @@ import { SessionProvider } from "next-auth/react";
 import { ThemeProvider } from "next-themes";
 import { type AppType } from "next/app";
 import Head from "next/head";
+import { Toaster } from "react-hot-toast";
 import Layout from "~/components/layout";
 import "~/styles/globals.css";
 import { api } from "~/utils/api";
@@ -19,6 +20,7 @@ const MyApp: AppType<{ session: Session | null }> = ({ Component, pageProps: { s
         <ThemeProvider>
           <Layout>
             <Component {...pageProps} />
+            <Toaster position="bottom-center" />
           </Layout>
         </ThemeProvider>
       </SessionProvider>
