@@ -7,7 +7,8 @@ const ThemeSwitch = () => {
 
   // useEffect only runs on the client, so now we can safely show the UI
   useEffect(() => {
-    setMounted(true)
+    window.matchMedia("(prefers-color-scheme: dark)") ? localStorage.setItem('theme', 'dark') : localStorage.setItem('theme', 'light');
+    setMounted(true);
   }, []);
 
   if (!mounted) {
@@ -27,7 +28,6 @@ const ThemeSwitch = () => {
           }
       </button>
     </>
-
   );
 }
 
