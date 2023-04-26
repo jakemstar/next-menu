@@ -10,6 +10,7 @@ datasource db {
 type RecipeIngredients {
   amount String
   name   String
+  unit   String
 }
 
 type UserEvents {

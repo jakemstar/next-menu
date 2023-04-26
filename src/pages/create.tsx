@@ -16,8 +16,8 @@ const recipeFormSchema = z.object({
 });
 
 const ingredientFormSchema = z.object({
-    ingredient: z.string().nonempty("Enter an ingredient"),
-    amount: z.string().nonempty("Enter an amount").regex(new RegExp('^[0-9]+$'), 'Amount must be a number')
+    ingredient: z.string().trim().nonempty("Enter an ingredient"),
+    amount: z.string().regex(new RegExp('^$|^[-]?[.]?[0-9]+[,.]?[0-9]*([\/][0-9]+[,.]?[0-9]*)*$'), 'Amount must be a number').regex(new RegExp('^$|^[.]?[0-9]+[,.]?[0-9]*([\/][0-9]+[,.]?[0-9]*)*$'), 'Amount must be positive').regex(new RegExp('^$|[^0]+'), 'Amount must > 0')
 });
 
 const stepFormSchema = z.object({
@@ -30,7 +30,7 @@ const recipeNonFormSchema = z.object({
     published: z.boolean(),
     updatedAt: z.date(),
     steps: z.array(z.string()),
-    ingredients: z.array(z.object({name: z.string(), amount: z.string()})),
+    ingredients: z.array(z.object({name: z.string(), amount: z.string(), unit: z.string()})),
 });
 
 export const recipeSchema = recipeNonFormSchema.merge(recipeFormSchema)
@@ -46,22 +46,28 @@ export default function Create() {
             setTitle('');
             setDescription('');
             setImageUrl('');
-            setIngredient({name: '', amount: '', amountTag: ''})
+            setIngredientName('')
+            setIngredientAmount('')
+            setIngredientUnit('')
             setStep('');
-            setIngredients([{name: '', amount: '', amountTag: ''}])
+            setIngredients([{name: '', amount: '', unit: ''}])
             setSteps([''])
         }
     })
     const { data } = useSession();
-    const [step, setStep] = useState('');
-    const [ingredient, setIngredient] = useState({name: '', amount: '', amountTag: ''});
 
     // Form values
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [imageUrl , setImageUrl] = useState('');
-    const [ingredients, setIngredients] = useState([{name: '', amount: '', amountTag: ''}]);
+    const [ingredients, setIngredients] = useState([{name: '', amount: '', unit: ''}]);
     const [steps, setSteps] = useState(['']);
+
+    const [ingredientName, setIngredientName] = useState('');
+    const [ingredientAmount, setIngredientAmount] = useState('');
+    const [ingredientUnit, setIngredientUnit] = useState('');
+
+    const [step, setStep] = useState('');
 
     //Form state
     const {
@@ -116,9 +122,15 @@ export default function Create() {
     };
 
     const ingredientOnSubmit: SubmitHandler<IngredientFormType> = () => {
-        if (!ingredients[0]?.name) {setIngredients([ingredient]); setIngredient({name: '', amount: '', amountTag: ''}); return;}
-        setIngredients([...ingredients, ingredient]);
-        setIngredient({name: '', amount: '', amountTag: ''})
+        function resetIngredient() {setIngredientName(''), setIngredientAmount(''); setIngredientUnit('')}
+        const parsedIngredient = {
+            name: ingredientName, 
+            amount: ingredientAmount, 
+            unit: ingredientAmount ? ingredientUnit : ''
+        }
+        if (!ingredients[0]?.name) {setIngredients([parsedIngredient]); resetIngredient(); return;}
+        setIngredients([...ingredients, parsedIngredient]);
+        resetIngredient();
     };
     
     const stepOnSubmit: SubmitHandler<StepFormType> = () => {
@@ -151,14 +163,14 @@ export default function Create() {
                             <p className="text-xl">Ingredients</p>
                             <div className="flex">
                                 <div className="relative z-0 w-full group">
-                                    <input {...ingredientRegister('ingredient')} onChange={(e) => setIngredient({name: e.target.value, amount: ingredient.amount, amountTag: ingredient.amountTag})} value={ingredient.name} type="text" name="ingredient" id="ingredient" className={classNames(ingredientErrors.ingredient?.message ? "border-red-600 focus:border-red-800 dark:border-red-400 dark:focus:border-red-300" : "border-slate-700 dark:border-slate-400 focus:border-indigo-800 dark:focus:border-slate-50", "peer block py-2.5 px-0 w-11/12 text-sm bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0")} placeholder=" "  />
+                                    <input {...ingredientRegister('ingredient')} onChange={(e) => setIngredientName(e.target.value)} value={ingredientName} type="text" name="ingredient" id="ingredient" className={classNames(ingredientErrors.ingredient?.message ? "border-red-600 focus:border-red-800 dark:border-red-400 dark:focus:border-red-300" : "border-slate-700 dark:border-slate-400 focus:border-indigo-800 dark:focus:border-slate-50", "peer block py-2.5 px-0 w-11/12 text-sm bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0")} placeholder=" "  />
                                     <label htmlFor="ingredient" className={classNames(ingredientErrors.ingredient?.message ? "text-red-600 peer-focus:text-red-800 dark:text-red-400 dark:peer-focus:text-red-300" : "text-slate-700 dark:text-slate-400 peer-focus:text-indigo-800 peer-focus:dark:text-slate-50","peer-focus:font-medium absolute text-sm duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6")}>{ingredientErrors.ingredient?.message ? `${ingredientErrors.ingredient?.message}` : "Ingredient"}</label>
                                 </div>
                                 <div className="relative z-0 w-full group">
-                                    <input {...ingredientRegister('amount')} onChange={(e) => setIngredient({name: ingredient.name, amount: e.target.value, amountTag: ingredient.amountTag})} value={ingredient.amount} type="text" name="amount" id="amount" className={classNames(ingredientErrors.ingredient?.message ? "border-red-600 focus:border-red-800 dark:border-red-400 dark:focus:border-red-300" : "border-slate-700 dark:border-slate-400 focus:border-indigo-800 dark:focus:border-slate-50", "peer block py-2.5 px-0 w-11/12 text-sm bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0")} placeholder=" "  />
+                                    <input {...ingredientRegister('amount')} onChange={(e) => setIngredientAmount(e.target.value)} value={ingredientAmount} type="text" name="amount" id="amount" className={classNames(ingredientErrors.ingredient?.message ? "border-red-600 focus:border-red-800 dark:border-red-400 dark:focus:border-red-300" : "border-slate-700 dark:border-slate-400 focus:border-indigo-800 dark:focus:border-slate-50", "peer block py-2.5 px-0 w-11/12 text-sm bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0")} placeholder=" "  />
                                     <label htmlFor="amount" className={classNames(ingredientErrors.ingredient?.message ? "text-red-600 peer-focus:text-red-800 dark:text-red-400 dark:peer-focus:text-red-300" : "text-slate-700 dark:text-slate-400 peer-focus:text-indigo-800 peer-focus:dark:text-slate-50","peer-focus:font-medium absolute text-sm duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6")}>{ingredientErrors.amount?.message ? `${ingredientErrors.amount?.message}` : "Amount"}</label>
                                 </div>
-                                <select value={ingredient.amountTag} onChange={(e) => setIngredient({name: ingredient.name, amount: ingredient.amount, amountTag: e.target.value})} id="amountTag" className="mr-2.5 bg-indigo-200   border border-slate-300 text-slate-900 text-sm rounded focus:ring-slate-50 focus:border-slate-50 block p-2.5 dark:bg-slate-600 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-slate-50 dark:focus:border-slate-50">
+                                <select value={ingredientUnit} onChange={(e) => setIngredientUnit(e.target.value)} id="unit" className="mr-2.5 bg-indigo-200   border border-slate-300 text-slate-900 text-sm rounded focus:ring-slate-50 focus:border-slate-50 block p-2.5 dark:bg-slate-600 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-slate-50 dark:focus:border-slate-50">
                                     <option value="">blank</option>
                                     <option value="lb">lb</option>S
                                     <option value="cup(s)">cup(s)</option>
@@ -183,7 +195,7 @@ export default function Create() {
                             {typeof index !== 'undefined' ? `${index+1}. ` : ''}
                             {value.name}{' '}
                             {value.amount}
-                            {value.amountTag}
+                            {value.unit}
                                 <button type="button" className="active:translate-y-0.5" onClick={() => {setIngredients(typeof index !== 'undefined' ? arrayRemove(ingredients, index) : ingredients)}}>
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
