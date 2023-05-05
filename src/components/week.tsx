@@ -8,8 +8,8 @@ import Loading from "./loading";
 
 export default function Week() {
     const { data: userSession } = useSession();
-    const { data: user, isLoading: userLoading, isFetching: userFetching } = api.users.fromId.useQuery({userId: `${userSession?.user.id || ''}`});
-    const { data: recipes, isLoading: recipesLoading, isFetching: recipesFetching } = api.recipes.getAll.useQuery();
+    const { data: user, isLoading: userLoading } = api.users.fromId.useQuery({userId: `${userSession?.user.id || ''}`});
+    const { data: recipes } = api.recipes.getAll.useQuery();
     const events = user ? user?.events : [];
 
     const contentDaysOfTheWeek = daysOfTheWeek.map((day, idx) => {
@@ -24,7 +24,7 @@ export default function Week() {
         return {name: day, slashDate: mmYYSlateDate}
     })
 
-    if (recipesLoading || recipesFetching || userLoading || userFetching) return <Loading />
+    if (userLoading) return <Loading />
 
     return (
         <div className="grid grid-cols-1 gap-6 pt-6 md:grid-cols-2 lg:grid-cols-4">

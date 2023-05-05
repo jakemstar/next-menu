@@ -11,6 +11,7 @@ import { classNames } from '~/utils/utility';
 
 const navigation = [
   { name: 'Dashboard', href: '/', current: false },
+  { name: 'Calendar', href: '/calendar', current: false },
   { name: 'Catalog', href: '/catalog', current: false },
   { name: 'Create', href: '/create', current: false },
 ]
